@@ -5,33 +5,32 @@ public class Main {
         Fries fries = new Fries();
         HotDog hotDog = new HotDog();
 
-        // Add toppings directly to the food items
-        burger.addTopping(new Cheese(burger)); // Note: Passing 'burger' here might not be necessary anymore due to the updated structure.
-        burger.addTopping(new Bacon(burger));  // Same note as above.
-        fries.addTopping(new Cheese(fries));   // Adding cheese to fries as an example.
-        // No toppings added to hotDog for this example
+        // Add toppings to the food items
+        burger.addTopping(new Cheese()); // Assume Cheese is now just a FoodItem with a fixed cost
+        burger.addTopping(new Bacon());  // Assume Bacon is now just a FoodItem with a fixed cost
+        fries.addTopping(new Cheese());  // You can add the same topping to different food items
 
-        // Displaying the cost of individual items with toppings
-        System.out.println("Burger with toppings cost: " + burger.getCost());
-        System.out.println("Fries with toppings cost: " + fries.getCost());
-        System.out.println("HotDog cost (no toppings): " + hotDog.getCost());
+        // Calculate the cost of each item
+        System.out.println("Cost of a burger with toppings: $" + burger.getCost());
+        System.out.println("Cost of fries with toppings: $" + fries.getCost());
+        System.out.println("Cost of a hot dog: $" + hotDog.getCost());
 
-        // Creating an order and adding the items
+        // Create an order and add the items
         Order order = new Order();
         order.addItem(burger);
         order.addItem(fries);
         order.addItem(hotDog);
 
-        // Calculating the total cost of the order
-        double total = order.calculateTotal();
-        System.out.println("Total cost before discount: " + total);
+        // Calculate the total cost of the order
+        double totalCost = order.calculateTotal();
+        System.out.println("Total cost of the order: $" + totalCost);
 
-        // Applying a loyalty discount
+        // Apply loyalty discount if applicable
         LoyaltyDiscount loyaltyDiscount = new LoyaltyDiscount();
-        boolean isLoyalCustomer = true; // Example: the customer is a loyal customer
-        double discountedTotal = loyaltyDiscount.applyDiscount(total, isLoyalCustomer);
+        boolean isLoyalCustomer = true; // Example condition, this could be determined by some other logic in your system
+        double discountedCost = loyaltyDiscount.applyDiscount(totalCost, isLoyalCustomer);
 
-        System.out.println("Total cost after loyalty discount: " + discountedTotal);
+        System.out.println("Total cost after loyalty discount: $" + discountedCost);
     }
 }
 

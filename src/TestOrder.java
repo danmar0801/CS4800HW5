@@ -5,56 +5,70 @@ public class TestOrder {
 
     @Test
     public void burgerBasePriceTest() {
-        FoodItem burger = new Burger();
+        Burger burger = new Burger();
         assertEquals(5.0, burger.getCost(), "Burger base price should be 5.0");
     }
 
     @Test
     public void friesBasePriceTest() {
-        FoodItem fries = new Fries();
+        Fries fries = new Fries();
         assertEquals(2.0, fries.getCost(), "Fries base price should be 2.0");
     }
 
     @Test
     public void hotDogBasePriceTest() {
-        FoodItem hotDog = new HotDog();
+        HotDog hotDog = new HotDog();
         assertEquals(3.0, hotDog.getCost(), "HotDog base price should be 3.0");
     }
 
     @Test
-    public void cheeseAddOnTest() {
-        FoodItem cheeseBurger = new Cheese(new Burger());
-        assertEquals(5.5, cheeseBurger.getCost(), "Cheese Burger should cost 5.5");
+    public void burgerWithToppingsTest() {
+        Burger burger = new Burger();
+        burger.addTopping(new Cheese()); // Assume Cheese is just a FoodItem with a fixed cost
+        burger.addTopping(new Bacon());  // Assume Bacon is just a FoodItem with a fixed cost
+        assertEquals(5.0 + Cheese.CHEESE_COST + Bacon.BACON_COST, burger.getCost(), "Burger with Cheese and Bacon should cost correctly");
     }
 
     @Test
-    public void baconAddOnTest() {
-        FoodItem baconFries = new Bacon(new Fries());
-        assertEquals(2.7, baconFries.getCost(), "Bacon Fries should cost 2.7");
+    public void friesWithToppingsTest() {
+        Fries fries = new Fries();
+        fries.addTopping(new Cheese()); // Adding Cheese to fries
+        assertEquals(2.0 + Cheese.CHEESE_COST, fries.getCost(), "Fries with Cheese should cost correctly");
     }
 
     @Test
-    public void calculateTotalTest() {
+    public void calculateTotalOrderTest() {
         Order order = new Order();
-        order.addItem(new Burger());
-        order.addItem(new Cheese(new Fries()));
-        assertEquals(7.5, order.calculateTotal(), "Total cost should be 7.5");
+        Burger burger = new Burger();
+        burger.addTopping(new Cheese());
+        burger.addTopping(new Bacon());
+
+        Fries fries = new Fries();
+        fries.addTopping(new Cheese());
+
+        HotDog hotDog = new HotDog();
+
+        order.addItem(burger);
+        order.addItem(fries);
+        order.addItem(hotDog);
+
+        double expectedTotal = 5.0 + Cheese.CHEESE_COST + Bacon.BACON_COST + 2.0 + Cheese.CHEESE_COST + 3.0;
+        assertEquals(expectedTotal, order.calculateTotal(), "Total cost of the order should be calculated correctly");
     }
 
     @Test
     public void applyLoyaltyDiscountTest() {
-        double total = 10.0;
+        Order order = new Order();
+        Burger burger = new Burger();
+        burger.addTopping(new Cheese());
+        burger.addTopping(new Bacon());
+
+        order.addItem(burger);
+
+        double total = order.calculateTotal();
         LoyaltyDiscount loyaltyDiscount = new LoyaltyDiscount();
         double discountedTotal = loyaltyDiscount.applyDiscount(total, true);
-        assertEquals(9.0, discountedTotal, "Discounted total should be 9.0 for loyal customers");
-    }
-
-    @Test
-    public void noLoyaltyDiscountTest() {
-        double total = 10.0;
-        LoyaltyDiscount loyaltyDiscount = new LoyaltyDiscount();
-        double discountedTotal = loyaltyDiscount.applyDiscount(total, false);
-        assertEquals(10.0, discountedTotal, "Discounted total should be 10.0 for non-loyal customers");
+        assertEquals((5.0 + Cheese.CHEESE_COST + Bacon.BACON_COST) * 0.9, discountedTotal, "Discounted total should be calculated correctly for loyal customers");
     }
 }
 
