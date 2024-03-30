@@ -1,11 +1,9 @@
-public class Bacon extends FoodItemDecorator {
-    public Bacon(FoodItem decoratedFoodItem) {
-        super(decoratedFoodItem);
-    }
+public class Bacon implements FoodItem {
+    public static final double BACON_COST = 0.7;
 
     @Override
     public double getCost() {
-        return decoratedFoodItem.getCost() + 0.7;
+        return BACON_COST;
     }
 }
 

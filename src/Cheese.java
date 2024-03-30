@@ -1,11 +1,9 @@
-public class Cheese extends FoodItemDecorator {
-    public Cheese(FoodItem decoratedFoodItem) {
-        super(decoratedFoodItem);
-    }
+public class Cheese implements FoodItem {
+    public static final double CHEESE_COST = 0.5;
 
     @Override
     public double getCost() {
-        return decoratedFoodItem.getCost() + 0.5;
+        return CHEESE_COST;
     }
 }
 
